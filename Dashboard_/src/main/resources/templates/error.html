@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #5001fd;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .error {
+            font-size: 120px;
+            color: #ff0000;
+            animation: pulse 1s infinite;
+        }
+
+        .message {
+            font-size: 24px;
+            color: #333333;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0078d4;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="error">😟</div>
+    <div class="message">Oops, something went wrong.</div>
+    <div class="message">You are not authorized to access this page.</div>
+    <a href="/user-page" class="button">Go back home</a>
+</div>
+</body>
+</html>

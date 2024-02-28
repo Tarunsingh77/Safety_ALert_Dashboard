@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Alert</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.rawgit.com/jmesnil/stomp-websocket/2.3.3/lib/stomp.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <script src="/script/main.js"></script>
+
+
+</head>
+<body>
+<header>
+
+        <div class="navbar">
+            <div class="logo" title="Safety Alert">
+
+                <h1><span class="danger">Safety Alert</span></h1>
+            </div>
+                <ul class="links">
+                    <li><a href="#" onclick="showSubject('kpi')">HOME</a></li>
+                    <li>
+                        <a href="#">DATA QUERY</a>
+                        <i class='bx bxs-chevron-down htmlcss-arrow arrow  '></i>
+                        <ul class="htmlCss-sub-menu sub-menu">
+                            <li><a href="#" onclick="showSubject('kpi')">KPI Index</a></li>
+                            <li id="safetyScoreMenu"><a href="#" onclick="showSafetyScore()">Safety Score</a></li>
+                            <li class="more">
+                <span><a href="#">HEATMAP</a>
+                <i class='bx bxs-chevron-right arrow more-arrow'></i>
+              </span>
+                                <ul class="more-sub-menu sub-menu">
+                                    <li><a href="#" onclick="showSubject('speed')">Over-Speeding</a></li>
+                                    <li><a href="#" onclick="showSubject('vest')">No-Vest</a></li>
+                                    <li><a href="#" onclick="showSubject('ped')">No-Pedestrian Zone</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">SETTINGS</a>
+                        <i class='bx bxs-chevron-down js-arrow arrow '></i>
+                        <ul class="js-sub-menu sub-menu">
+                            <li><a href="/parameter">Parameter Settings</a></li>
+                            <li><a href="#">Email-Alert Settings</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+            <div class="theme-toggler">
+                <span class="material-icons-sharp active">light_mode</span>
+                <span class="material-icons-sharp">dark_mode</span>
+            </div>
+        </div>
+
+</header>
+<div class="container">
+    <aside>
+<!--        <label for="startDate">Start Date:</label>-->
+<!--        <input type="datetime-local" id="startDate">-->
+<!--        -->
+        <div> <h3>Please Select Date-Range:</h3><input type="text" name="daterange"  />
+        </div>
+
+<!--        <label for="endDate">End Date:</label>-->
+<!--        <input type="datetime-local" id="endDate">-->
+
+        <!-- Add the dropdown menu for cameras -->
+        <h3> Select Camera:</h3>
+        <select id="camera">
+            <option value="gxo_ob">gxo_ob</option>
+            <option value="gxo_ib">gxo_ib</option>
+            <option value="gxo_ib">gxo_amazon</option>
+            <option value="gxo_ib">gxo_exit</option>
+            <option value="gxo_ib">gxo_ob</option>
+            <!-- Add options for other cameras -->
+        </select>
+
+        <button onclick="queryData()">Query-Data</button>
+
+    </aside>
+
+    <main>
+        <div class="subjects">
+
+        <div id="speed" class="subject">
+        </div>
+        <div id="vest" class="subject">
+        </div>
+            <div id="ped" class="subject">
+                <!-- The image element is removed -->
+            </div>
+<!--            <div >-->
+<!--                <div id="safety-score" class="circular-progress">-->
+            <div id="safety-score" class="subject">
+                <div id="progress">
+                <div class="container-progress">
+                    <div class="text-box">
+                        <img src="/css/images/speeding.png" alt="home" style="width: 32px !important; height: 32px !important;">
+
+                        <h2>Over-Speeding</h2>
+                        <div style=" width:100px; background-color:pink;">
+                            Violation: 90, Total: 100
+                        </div>
+
+                    </div>
+                    <div class="circular-progress">
+                        <div class="progress-value">50%</div>
+                    </div>
+                </div>
+                <div class="container-progress">
+                    <div class="text-box">
+                        <img src="/css/images/novest.jpg" alt="home" style="width: 32px !important; height: 32px !important;">
+                        <h2>No-Vest</h2>
+                        <div style=" width:100px; background-color:pink;">
+                            Violation: 90, Total: 100
+                        </div>
+                    </div>
+                    <div class="circular-progress">
+                        <div class="progress-value">50%</div>
+                    </div>
+                </div>
+                    <div class="container-progress">
+                        <div class="text-box">
+                            <img src="/css/images/ped.png" alt="home" style="width: 32px !important; height: 32px !important;">
+                            <h2>No-Ped-Zone</h2>
+                            <div style=" width:100px; background-color:pink;">
+                                Violation: 90, Total: 100
+                            </div>
+                        </div>
+                        <div class="circular-progress">
+                            <div class="progress-value">50%</div>
+                        </div>
+                    </div>
+
+            </div>
+            </div>
+
+
+            <div id="kpi" class="subject">
+                <canvas id="myChart"></canvas>
+            </div>
+          </div>
+
+    </main>
+
+
+</div>
+
+</body>
+
+</html>
